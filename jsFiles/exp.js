@@ -53,7 +53,7 @@ var exp = (function() {
         postTask: [
             `<div class='parent'>
                 <p>Dot Detective is now complete!</p>
-                <p>To finish this study, please continue to answer a few final questions.</p>
+                <p>To finish this study, please continue to complete a few surveys.</p>
             </div>`]
     };
 
