@@ -120,7 +120,7 @@ var exp = (function() {
         canvas_size: [600, 800],
         choices: settings.responseKeys,
         prompt: '<p>On average, on there more <span style="color: red">red</span> dots or <span style="color: blue">blue</span> dots?</p><p>Press <span style="color: red">"e" for red</span> and <span style="color: blue">"i" for blue</span>.</p>',
-        data: {drift: jsPsych.timelineVariable('drift'), zigWeight: jsPsych.timelineVariable('zigWeight'), trialType: jsPsych.timelineVariable('trialType'), blockType: jsPsych.timelineVariable('blockType')},
+        data: {drift: jsPsych.timelineVariable('drift'), trialType: jsPsych.timelineVariable('trialType'), blockType: jsPsych.timelineVariable('blockType')},
         on_finish: function(data){
             data.round = round;
             if(jsPsych.timelineVariable('drift') > 0) {
@@ -404,7 +404,7 @@ var exp = (function() {
             type: jsPsychSurveyLikert,
             preamble:
                 `<div style='padding-top: 50px; width: 900px; font-size:16px'>
-                    <p>When you are doing household work or other routine chores (e.g. cooking, cleaning, shopping) how often does it happen that...</p>
+                    <p>When you are doing household work or other routine chores (e.g. cooking, cleaning, shopping)<br>how often does it happen that...</p>
                 </div>`,
             questions: [
                 {
