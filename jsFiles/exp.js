@@ -224,11 +224,11 @@ var exp = (function() {
             allow_keys: false,
         };
 
-        const autotelicScale = ['-2<br>Strongly<br>Disagree', '-1<br>Disagree', '0<br>Neither agree<br>nor disagree', '1<br>Agree', '2<br>Strongly<br>Agree'];
+        const genFlowScale = ['-2<br>Totally<br>Disagree', '-1<br>Disagree', '0<br>Neither agree<br>nor disagree', '1<br>Agree', '2<br>Totally<br>Agree'];
         const flowProneScale = ['0<br>Never', '1<br>Rarely', '2<br>Sometimes', '3<br>Often', '4<br>Everyday, or almost everyday'];
         const nfcScale = ['-2<br>Extremely<br>Uncharacteristic', '-2<br>Somewhat<br>Uncharacteristic', '0<br>Uncertain', '1<br>Somewhat<br>Characteristic', '2<br>Extremely<br>Characteristic'];
 
-        const autotelicQuestions = {
+        const flowGenQuestions = {
             type: jsPsychSurveyLikert,
             preamble:
                 `<div style='padding-top: 50px; width: 900px; font-size:16px'>
@@ -237,159 +237,81 @@ var exp = (function() {
                 </div>`,
             questions: [
                 {
-                    prompt: `I am curious about the world.`,
-                    name: `ap_1_curiosity`,
-                    labels: autotelicScale,
+                    prompt: `I enjoy challenging tasks/activities that require a lot of focus.`,
+                    name: `genFlow_1`,
+                    labels: genFlowScale,
                     required: true,
                 },
                 {
-                    prompt: `I am good at finishing projects.`,
-                    name: `ap_2_persistence`,
-                    labels: autotelicScale,
+                    prompt: `When I am focused on a task/activity, I quickly tend to forget my surroundings (other people, time, and place).`,
+                    name: `genFlow_2`,
+                    labels: genFlowScale,
                     required: true,
                 },
                 {
-                    prompt: `I worry about how people view me.`,
-                    name: `ap_3_sc_r`,
-                    labels: autotelicScale,
+                    prompt: `I usually experience a good flow when I do something (things that are neither too easy nor too difficult for me).`,
+                    name: `genFlow_3`,
+                    labels: genFlowScale,
                     required: true,
                 },
                 {
-                    prompt: `I would choose a job that I enjoy over a job that pays more.`,
-                    name: `ap_4_IM`,
-                    labels: autotelicScale,
+                    prompt: `I have several different areas of interest.`,
+                    name: `genFlow_4`,
+                    labels: genFlowScale,
                     required: true,
                 },
                 {
-                    prompt: `I enjoy playing difficult games.`,
-                    name: `ap_5_challenge`,
-                    labels: autotelicScale,
+                    prompt: `It is difficult for me to walk away from or quit a project I am currently working on.`,
+                    name: `genFlow_5`,
+                    labels: genFlowScale,
                     required: true,
                 },
                 {
-                    prompt: `I have fun doing things that others say are boring.`,
-                    name: `ap_6_boredom`,
-                    labels: autotelicScale,
+                    prompt: `I become stressed in the face of difficult/challenging tasks.`,
+                    name: `genFlow_6r`,
+                    labels: genFlowScale,
                     required: true,
                 },
                 {
-                    prompt: `I find it hard to choose where my attention goes.`,
-                    name: `ap_7_ctrl_r`,
-                    labels: autotelicScale,
+                    prompt: `It is difficult for me to maintain concentration over time.`,
+                    name: `genFlow_7r`,
+                    labels: genFlowScale,
                     required: true,
                 },
                 {
-                    prompt: `I actively seek all the information I can about a new situation.`,
-                    name: `ap_8_curiosity`,
-                    labels: autotelicScale,
+                    prompt: `I quickly become tired of the things I do.`,
+                    name: `genFlow_8r`,
+                    labels: genFlowScale,
                     required: true,
                 },
                 {
-                    prompt: `When a task becomes difficult, I keep going until I complete it.`,
-                    name: `ap_9_persistence`,
-                    labels: autotelicScale,
+                    prompt: `I am usually satisfied with the results of my efforts across various tasks (I experience feelings of mastery).`,
+                    name: `genFlow_9`,
+                    labels: genFlowScale,
                     required: true,
                 },
                 {
-                    prompt: `I worry about being laughed at.`,
-                    name: `ap_10_sc_r`,
-                    labels: autotelicScale,
+                    prompt: `When I focus on something, I often forget to take a break.`,
+                    name: `genFlow_10`,
+                    labels: genFlowScale,
                     required: true,
                 },
                 {
-                    prompt: `I think the process of completing a task is its own reward.`,
-                    name: `ap_11_IM`,
-                    labels: autotelicScale,
+                    prompt: `I get bored easily.`,
+                    name: `genFlow_11r`,
+                    labels: genFlowScale,
                     required: true,
                 },
                 {
-                    prompt: `I would prefer a job that is challenging over a job that is easy.`,
-                    name: `ap_12_challenge`,
-                    labels: autotelicScale,
+                    prompt: `My daily tasks are exhausting rather than stimulating.`,
+                    name: `genFlow_12r`,
+                    labels: genFlowScale,
                     required: true,
                 },
                 {
-                    prompt: `I am able to find pleasure even in routine types of work.`,
-                    name: `ap_13_boredom`,
-                    labels: autotelicScale,
-                    required: true,
-                },
-                {
-                    prompt: `I get distracted easily.`,
-                    name: `ap_14_ctrl_r`,
-                    labels: autotelicScale,
-                    required: true,
-                },
-                {
-                    prompt: `I take time to explore my surroundings.`,
-                    name: `ap_15_curiosity`,
-                    labels: autotelicScale,
-                    required: true,
-                },
-                {
-                    prompt: `I complete tasks even when they are hard.`,
-                    name: `ap_16_persistence`,
-                    labels: autotelicScale,
-                    required: true,
-                },
-                {
-                    prompt: `I am easily affected by others' impressions of me.`,
-                    name: `ap_17_sc_r`,
-                    labels: autotelicScale,
-                    required: true,
-                },
-                {
-                    prompt: `I care more about enjoyment of a task than rewards associated with it.`,
-                    name: `ap_18_IM`,
-                    labels: autotelicScale,
-                    required: true,
-                },
-                {
-                    prompt: `I like solving complex problems.`,
-                    name: `ap_19_challenge`,
-                    labels: autotelicScale,
-                    required: true,
-                },
-                {
-                    prompt: `Repetitive tasks can be enjoyable.`,
-                    name: `ap_20_boredom`,
-                    labels: autotelicScale,
-                    required: true,
-                },
-                {
-                    prompt: `It is hard for me to stay on task.`,
-                    name: `ap_21_ctrl_r`,
-                    labels: autotelicScale,
-                    required: true,
-                },
-                {
-                    prompt: `Curiosity is the driving force behind much of what I do.`,
-                    name: `ap_22_curiosity`,
-                    labels: autotelicScale,
-                    required: true,
-                },
-                {
-                    prompt: `I keep working on a problem until I solve it.`,
-                    name: `ap_23_persistence`,
-                    labels: autotelicScale,
-                    required: true,
-                },
-                {
-                    prompt: `I am afraid of making the wrong impression.`,
-                    name: `ap_24_sc_r`,
-                    labels: autotelicScale,
-                    required: true,
-                },
-                {
-                    prompt: `What matters most to me is enjoying the things I do.`,
-                    name: `ap_25_IM`,
-                    labels: autotelicScale,
-                    required: true,
-                },
-                {
-                    prompt: `I make a game out of chores.`,
-                    name: `ap_26_boredom`,
-                    labels: autotelicScale,
+                    prompt: `I develop and interest for most of the things I do in life.`,
+                    name: `genFlow_13`,
+                    labels: genFlowScale,
                     required: true,
                 },
             ],
@@ -625,7 +547,7 @@ var exp = (function() {
         }; 
 
         const demos = {
-            timeline: [autotelicQuestions, flowProne_1, flowProne_2, nfc, gender, age, ethnicity, english, finalWord]
+            timeline: [flowGenQuestions, flowProne_1, flowProne_2, nfc, gender, age, ethnicity, english, finalWord]
         };
 
         return demos;
