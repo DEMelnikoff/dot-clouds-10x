@@ -5,8 +5,7 @@ var exp = (function() {
 
     const settings = {
         responseKeys: ['e', 'i'],
-        signal: 10,
-        zigWeight: [1, 10][Math.round(Math.random())],
+        signal: [10, -10, 100, -100],
         noise: 10,
         nDots: 100,
         nRounds: 5,
@@ -36,6 +35,14 @@ var exp = (function() {
                 <p>Sometimes, the average number of <span style="color: red">red</span> dots will be greater than the average number of <span style="color: blue">blue</span> dots.</p>
                 <p>Other times, the average number of <span style="color: blue">blue</span> dots will be greater than the average number of <span style="color: red">red</span> dots.</p>
                 <p><strong>Your job is to detect whether there are more <span style="color: red">red dots</span> or <span style="color: blue">blue dots</span> on average.</strong></p>
+            </div>`,
+
+            `<div class='parent'>
+                <p>While playing dot detective, you'll notice that some trials are easier than others;<br>sometimes it will be easy to detect whether there are 
+                more <span style="color: red">red dots</span> or <span style="color: blue">blue dots</span>, and sometimes it will be very difficult.</p>
+
+                <p><strong>No matter how difficult it seems, there is always a correct answer!<br>Even if the numer of <span style="color: red">red dots</span> or <span style="color: blue">blue dots</span>
+                appears very similar,<br>one of the colors is always more numerous on average.</strong></p>
             </div>`,
 
             `<div class='parent'>
@@ -90,37 +97,35 @@ var exp = (function() {
     const secondsLeft = arrayToList( (Array.from(Array(settings.breakLength).keys())).map((x) => settings.breakLength - x) )  // list of seconds remaining during breaks
     
     const factors = {
-        drift: [settings.signal, -settings.signal],
+        drift: settings.signal,
         noise: [settings.noise],
-        zigWeight: [settings.zigWeight],
-        trialType: [].concat(Array(5).fill('normal'), ['zigZag', 'flatLine']),
         blockType: ['test'],
     };  // factors for making experimental design
     
     const factorsPractice = {
-        drift: [settings.signal, -settings.signal],
+        drift: settings.signal,
         noise: [settings.noise],
         zigWeight: [settings.zigWeight],
-        trialType: Array(5).fill('normal'),
         blockType: ['practice'],
     };  // factors for making practice block
 
-    const design = jsPsych.randomization.factorial(factors, 3);  // experimental design
+    const design = jsPsych.randomization.factorial(factors, 10);  // experimental design
 
-    
-    const designPractice = jsPsych.randomization.factorial(factorsPractice, 1);  // experimental design for practice block
+    console.log(design)
+
+    const designPractice = jsPsych.randomization.factorial(factorsPractice, 2);  // experimental design for practice block
 
     // trials
     const probe = {
         type: jsPsychCanvasKeyboardResponse,
         stimulus: function(c) {
-            console.log(jsPsych.timelineVariable('trialType'), jsPsych.timelineVariable('drift'), jsPsych.timelineVariable('zigWeight'));
-            dots(c, jsPsych.timelineVariable('drift'), jsPsych.timelineVariable('zigWeight'), jsPsych.timelineVariable('noise'), jsPsych.timelineVariable('trialType'), settings.responseKeys, settings.nDots);
+            console.log(jsPsych.timelineVariable('drift'));
+            dots(c, jsPsych.timelineVariable('drift'), 1, jsPsych.timelineVariable('noise'), 'normal', settings.responseKeys, settings.nDots);
         },
         canvas_size: [600, 800],
         choices: settings.responseKeys,
         prompt: '<p>On average, on there more <span style="color: red">red</span> dots or <span style="color: blue">blue</span> dots?</p><p>Press <span style="color: red">"e" for red</span> and <span style="color: blue">"i" for blue</span>.</p>',
-        data: {drift: jsPsych.timelineVariable('drift'), trialType: jsPsych.timelineVariable('trialType'), blockType: jsPsych.timelineVariable('blockType')},
+        data: {drift: jsPsych.timelineVariable('drift'), blockType: jsPsych.timelineVariable('blockType')},
         on_finish: function(data){
             data.round = round;
             if(jsPsych.timelineVariable('drift') > 0) {
@@ -227,13 +232,185 @@ var exp = (function() {
         const genFlowScale = ['-2<br>Totally<br>Disagree', '-1<br>Disagree', '0<br>Neither agree<br>nor disagree', '1<br>Agree', '2<br>Totally<br>Agree'];
         const flowProneScale = ['0<br>Never', '1<br>Rarely', '2<br>Sometimes', '3<br>Often', '4<br>Everyday, or almost everyday'];
         const nfcScale = ['-2<br>Extremely<br>Uncharacteristic', '-2<br>Somewhat<br>Uncharacteristic', '0<br>Uncertain', '1<br>Somewhat<br>Characteristic', '2<br>Extremely<br>Characteristic'];
+        const curiosityScale = ['1<br>Almost<br>Never', '2<br>Sometimes', '3<br>Often', '4<br>Almost<br>Always'];
 
-        const flowGenQuestions = {
+        const autotelicQuestions = {
             type: jsPsychSurveyLikert,
             preamble:
                 `<div style='padding-top: 50px; width: 900px; font-size:16px'>
                     <p>The following statements describe how you might perceive yourself. As every individual is unique, you may find some of the statements describe you well and some of them don't.</p>
                     <p>Please express the extent to which you disagree or agree with each statement. We appreciate your effort.</p>
+                </div>`,
+            questions: [
+                {
+                    prompt: `I am curious about the world.`,
+                    name: `ap_1_curiosity`,
+                    labels: genFlowScale,
+                    required: true,
+                },
+                {
+                    prompt: `I am good at finishing projects.`,
+                    name: `ap_2_persistence`,
+                    labels: genFlowScale,
+                    required: true,
+                },
+                {
+                    prompt: `I worry about how people view me.`,
+                    name: `ap_3_sc_r`,
+                    labels: genFlowScale,
+                    required: true,
+                },
+                {
+                    prompt: `I would choose a job that I enjoy over a job that pays more.`,
+                    name: `ap_4_IM`,
+                    labels: genFlowScale,
+                    required: true,
+                },
+                {
+                    prompt: `I enjoy playing difficult games.`,
+                    name: `ap_5_challenge`,
+                    labels: genFlowScale,
+                    required: true,
+                },
+                {
+                    prompt: `I have fun doing things that others say are boring.`,
+                    name: `ap_6_boredom`,
+                    labels: genFlowScale,
+                    required: true,
+                },
+                {
+                    prompt: `I find it hard to choose where my attention goes.`,
+                    name: `ap_7_ctrl_r`,
+                    labels: genFlowScale,
+                    required: true,
+                },
+                {
+                    prompt: `I actively seek all the information I can about a new situation.`,
+                    name: `ap_8_curiosity`,
+                    labels: genFlowScale,
+                    required: true,
+                },
+                {
+                    prompt: `When a task becomes difficult, I keep going until I complete it.`,
+                    name: `ap_9_persistence`,
+                    labels: genFlowScale,
+                    required: true,
+                },
+                {
+                    prompt: `I worry about being laughed at.`,
+                    name: `ap_10_sc_r`,
+                    labels: genFlowScale,
+                    required: true,
+                },
+                {
+                    prompt: `I think the process of completing a task is its own reward.`,
+                    name: `ap_11_IM`,
+                    labels: genFlowScale,
+                    required: true,
+                },
+                {
+                    prompt: `I would prefer a job that is challenging over a job that is easy.`,
+                    name: `ap_12_challenge`,
+                    labels: genFlowScale,
+                    required: true,
+                },
+                {
+                    prompt: `I am able to find pleasure even in routine types of work.`,
+                    name: `ap_13_boredom`,
+                    labels: genFlowScale,
+                    required: true,
+                },
+                {
+                    prompt: `I get distracted easily.`,
+                    name: `ap_14_ctrl_r`,
+                    labels: genFlowScale,
+                    required: true,
+                },
+                {
+                    prompt: `I take time to explore my surroundings.`,
+                    name: `ap_15_curiosity`,
+                    labels: genFlowScale,
+                    required: true,
+                },
+                {
+                    prompt: `I complete tasks even when they are hard.`,
+                    name: `ap_16_persistence`,
+                    labels: genFlowScale,
+                    required: true,
+                },
+                {
+                    prompt: `I am easily affected by others' impressions of me.`,
+                    name: `ap_17_sc_r`,
+                    labels: genFlowScale,
+                    required: true,
+                },
+                {
+                    prompt: `I care more about enjoyment of a task than rewards associated with it.`,
+                    name: `ap_18_IM`,
+                    labels: genFlowScale,
+                    required: true,
+                },
+                {
+                    prompt: `I like solving complex problems.`,
+                    name: `ap_19_challenge`,
+                    labels: genFlowScale,
+                    required: true,
+                },
+                {
+                    prompt: `Repetitive tasks can be enjoyable.`,
+                    name: `ap_20_boredom`,
+                    labels: genFlowScale,
+                    required: true,
+                },
+                {
+                    prompt: `It is hard for me to stay on task.`,
+                    name: `ap_21_ctrl_r`,
+                    labels: genFlowScale,
+                    required: true,
+                },
+                {
+                    prompt: `Curiosity is the driving force behind much of what I do.`,
+                    name: `ap_22_curiosity`,
+                    labels: genFlowScale,
+                    required: true,
+                },
+                {
+                    prompt: `I keep working on a problem until I solve it.`,
+                    name: `ap_23_persistence`,
+                    labels: genFlowScale,
+                    required: true,
+                },
+                {
+                    prompt: `I am afraid of making the wrong impression.`,
+                    name: `ap_24_sc_r`,
+                    labels: genFlowScale,
+                    required: true,
+                },
+                {
+                    prompt: `What matters most to me is enjoying the things I do.`,
+                    name: `ap_25_IM`,
+                    labels: genFlowScale,
+                    required: true,
+                },
+                {
+                    prompt: `I make a game out of chores.`,
+                    name: `ap_26_boredom`,
+                    labels: genFlowScale,
+                    required: true,
+                },
+            ],
+            randomize_question_order: false,
+            scale_width: 500,
+            on_finish: (data) => {
+                saveSurveyData(data); 
+            },
+        };
+
+        const flowGenQuestions = {
+            type: jsPsychSurveyLikert,
+            preamble:
+                `<div style='padding-top: 50px; width: 900px; font-size:16px'>
+                    <p>Please express the extent to which you disagree or agree with each statement.</p>
                 </div>`,
             questions: [
                 {
@@ -312,6 +489,81 @@ var exp = (function() {
                     prompt: `I develop and interest for most of the things I do in life.`,
                     name: `genFlow_13`,
                     labels: genFlowScale,
+                    required: true,
+                },
+            ],
+            randomize_question_order: false,
+            scale_width: 500,
+            on_finish: (data) => {
+                saveSurveyData(data); 
+            },
+        };
+
+        const curiosity = {
+            type: jsPsychSurveyLikert,
+            preamble:
+                `<div style='padding-top: 50px; width: 900px; font-size:16px'>
+                    <p>For each of the following statements, please describe how frequently it applies to you.</p>
+                </div>`,
+            questions: [
+                {
+                    prompt: `I enjoy exploring new ideas.`,
+                    name: `curiosity_i_1`,
+                    labels: curiosityScale,
+                    required: true,
+                },
+                {
+                    prompt: `I find it fascinating to learn new information.`,
+                    name: `curiosity_i_2`,
+                    labels: curiosityScale,
+                    required: true,
+                },
+                {
+                    prompt: `I enjoy learning about subjects that are unfamiliar to me.`,
+                    name: `curiosity_i_3`,
+                    labels: curiosityScale,
+                    required: true,
+                },
+                {
+                    prompt: `When I learn something new, I like to find out more about it.`,
+                    name: `curiosity_i_4`,
+                    labels: curiosityScale,
+                    required: true,
+                },
+                {
+                    prompt: `I enjoy discussing abstract concepts.`,
+                    name: `curiosity_i_5`,
+                    labels: curiosityScale,
+                    required: true,
+                },
+                {
+                    prompt: `Difficult conceptual problems keep me awake all night thinking about solutions.`,
+                    name: `curiosity_d_1`,
+                    labels: curiosityScale,
+                    required: true,
+                },
+                {
+                    prompt: `I will spend hours on a single problem because I just can't rest without knowing the answer.`,
+                    name: `curiosity_d_2`,
+                    labels: curiosityScale,
+                    required: true,
+                },
+                {
+                    prompt: `I feel frustrated if I can't figure out the solution to a problem, so I work even harder to solve it.`,
+                    name: `curiosity_d_3`,
+                    labels: curiosityScale,
+                    required: true,
+                },
+                {
+                    prompt: `I brood for a long time in an attempt to solve some fundamental problem.`,
+                    name: `curiosity_d_4`,
+                    labels: curiosityScale,
+                    required: true,
+                },
+                {
+                    prompt: `I work like a fiend at problems that I feel must be solved.`,
+                    name: `curiosity_d_5`,
+                    labels: curiosityScale,
                     required: true,
                 },
             ],
@@ -547,7 +799,7 @@ var exp = (function() {
         }; 
 
         const demos = {
-            timeline: [flowGenQuestions, flowProne_1, flowProne_2, nfc, gender, age, ethnicity, english, finalWord]
+            timeline: [autotelicQuestions, flowGenQuestions, curiosity, flowProne_1, flowProne_2, nfc, gender, age, ethnicity, english, finalWord]
         };
 
         return demos;
