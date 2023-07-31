@@ -812,7 +812,6 @@ var exp = (function() {
 
 // create timeline
 const timeline = [
-    exp.demographics,
     exp.consent, 
     exp.prePractice, 
     exp.practice, 
