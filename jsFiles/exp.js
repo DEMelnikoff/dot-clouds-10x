@@ -41,7 +41,7 @@ var exp = (function() {
                 <p>While playing dot detective, you'll notice that some trials are easier than others;<br>sometimes it will be easy to detect whether there are 
                 more <span style="color: red">red dots</span> or <span style="color: blue">blue dots</span>, and sometimes it will be very difficult.</p>
 
-                <p><strong>No matter how difficult it seems, there is always a correct answer!<br>Even if the numer of <span style="color: red">red dots</span> or <span style="color: blue">blue dots</span>
+                <p><strong>No matter how difficult it seems, there is always a correct answer!<br>Even if the number of <span style="color: red">red dots</span> or <span style="color: blue">blue dots</span>
                 appears very similar,<br>one of the colors is always more numerous on average.</strong></p>
             </div>`,
 
@@ -109,9 +109,7 @@ var exp = (function() {
         blockType: ['practice'],
     };  // factors for making practice block
 
-    const design = jsPsych.randomization.factorial(factors, 10);  // experimental design
-
-    console.log(design)
+    const design = jsPsych.randomization.factorial(factors, 13);  // experimental design
 
     const designPractice = jsPsych.randomization.factorial(factorsPractice, 2);  // experimental design for practice block
 
@@ -486,7 +484,7 @@ var exp = (function() {
                     required: true,
                 },
                 {
-                    prompt: `I develop and interest for most of the things I do in life.`,
+                    prompt: `I develop an interest for most of the things I do in life.`,
                     name: `genFlow_13`,
                     labels: genFlowScale,
                     required: true,
@@ -745,7 +743,7 @@ var exp = (function() {
             html: `<div style="text-align: left">
             <p>Male <input name="gender" type="radio" value="male"/></p>
             <p>Female <input name="gender" type="radio" value="female"/></p>
-            <p>Other <input name="other" type="text"/></p>
+            <p>Other: <input name="other" type="text"/></p>
             </div>`,
             on_finish: (data) => {
                 data.gender = data.response.gender;
@@ -814,6 +812,7 @@ var exp = (function() {
 
 // create timeline
 const timeline = [
+    exp.demographics,
     exp.consent, 
     exp.prePractice, 
     exp.practice, 
